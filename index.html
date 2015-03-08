@@ -6,7 +6,7 @@
 	<script src="jquery-1.11.2.js"></script>
 	<script src="video.js"></script>
 </head>
-<body>
+<body >
 	<p>Enter Youtube URL: <input type="text" name="url" id="url" ></p>
 	<input type="button" id="but" value="submit">
 
@@ -27,15 +27,18 @@
 		</table>
 	</div>
 
+	<div id="jsondata">
+	</div>
+
 
 	<script type="text/javascript">
 	jQuery(document).ready(function() {
 		$("#but").click(function() {
 
-			var texting = $("#url").val();
+			var url = $("#url").val();
 			//var str = texting.text();
 
-			clicker(texting);
+			getJSONdata(url);
 
 			//prependbody(texting);
 
@@ -47,11 +50,79 @@
 	//send that information in json format to an external file. 
 
 	//on load of the page any videos in the json file are read on to the page and put into a list//table under the correct columns
-	});
+	//});
 
-	function clicker(str)
+	//method to load the json file data
+	function onload()
 	{
-		alert(str);  
+		var xmlhttp = new XMLHttpRequest();
+		var urli = "data.json";
+
+		xmlhttp.onreadystatechange = function()
+		{
+		    if (xmlhttp.readyState == 4 && xmlhttp.status == 200)
+		    {
+		        readJson(xmlhttp.responseText);
+	    	}
+		}
+
+		xmlhttp.open("GET", urli, true);
+		xmlhttp.send(null);
+	}
+
+	//method for the output of json file data
+	function readJson(jsontext)
+	{
+		var jarray = $.parseJSON(jsontext);
+		var i = 0;
+
+		var html = "table";
+
+		for (i; i < jarray.length; i++) {
+			html += "<tr><td>"+
+			jarray[i].id+"</td><td>"+
+			jarray[i].title+"</td><td>"+
+			jarray[i].description+"</td><tr>";
+		}
+
+		html +="</table>"
+		document.getelementbyId("jsondata").innerhtml = html;
+	}
+
+	function getJSONdata(urlstring)
+	{
+		var id = "";
+		var title = "";
+		var description = "";
+
+		$.getJSON(urlstring, function(response) {
+				id = response.data.id;
+				title = response.data.title;
+				description = response.data.description;
+
+				alert(id);
+		});
+
+		var inputData = {
+					"id" : id,
+					"title" : title,
+					"description" : description,
+					"url" : urlstring
+				}
+
+		writeJson(inputData);
+	}
+
+	//this function is to accept the Youtube response data and write it to our json file.
+	function writeJson(ytdata)
+	{
+		//here i find infile = /file.json in js. to write to file in json. possibly use writeJson();
+
+		//$.writeJson("")
+
+		$.post('data.json', param1: 'value1', function(data, textStatus, xhr) {
+			/*optional stuff to do after success */
+		});
 	}
 
 	</script>
