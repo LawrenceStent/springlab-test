@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<script src="jquery-1.11.2.js"></script>
+	<script src="video.js"></script>
+</head>
+<body>
+	<p>Enter Youtube URL: <input type="text" name="url" id="url" ></p>
+	<input type="button" id="but" value="submit">
+
+	<div class="table-responsive">
+		<table class="table table-hover">
+			<thead>
+				<tr>
+					<th>ID</th>
+					<th>TITLE</th>
+					<th>DESCRIPTION</th>
+					<th>URL</th>
+				</tr>
+			</thead>
+			<tbody>
+				
+			</tbody>
+
+		</table>
+	</div>
+
+
+	<script type="text/javascript">
+	jQuery(document).ready(function() {
+		$("#but").click(function() {
+
+			var texting = $("#url").val();
+			//var str = texting.text();
+
+			clicker(texting);
+
+			//prependbody(texting);
+
+					});
+	});
+
+	//what needs to be done: for post -  accept user url input, send that input to function whereby $.$.getJSON responds with the api info. extract the video id, title, description, url... 
+
+	//send that information in json format to an external file. 
+
+	//on load of the page any videos in the json file are read on to the page and put into a list//table under the correct columns
+	});
+
+	function clicker(str)
+	{
+		alert(str);  
+	}
+
+	</script>
+
+</body>
+
+</html>
