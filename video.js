@@ -102,7 +102,7 @@ jQuery(document).ready(function() {
 			alert(obj);
 		});*/
 		$.ajax({
-			url: 'data.json',
+			url: 'data.txt',
 			type: 'POST',
 			dataType: 'json',
 			data: obj,
@@ -125,7 +125,7 @@ jQuery(document).ready(function() {
 		var deleting = document.getelementbyId(id);
 
 		$.ajax({
-			url: 'data.json',
+			url: 'data.txt',
 			type: 'DELETE',
 			dataType: 'json',
 			data: {jsonarray[id]}
