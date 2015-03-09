@@ -6,7 +6,7 @@
 	<script src="jquery-1.11.2.js"></script>
 	<script src="video.js"></script>
 </head>
-<body >
+<body onload="onload()">
 	<p>Enter Youtube URL: <input type="text" name="url" id="url" ></p>
 	<input type="button" id="but" value="submit">
 
@@ -27,7 +27,7 @@
 		</table>
 	</div>
 
-	<div id="jsondata">
+	<div id="jsondata" class="table-responsive">
 	</div>
 
 
@@ -45,7 +45,7 @@
 					});
 	});
 
-	//what needs to be done: for post -  accept user url input, send that input to function whereby $.$.getJSON responds with the api info. extract the video id, title, description, url... 
+	//what needs to be done: for post -  accept user url input, send that input to function whereby $.getJSON responds with the api info. extract the video id, title, description, url... 
 
 	//send that information in json format to an external file. 
 
@@ -62,6 +62,7 @@
 		{
 		    if (xmlhttp.readyState == 4 && xmlhttp.status == 200)
 		    {
+		    	//calls the readJson method to place data in a table
 		        readJson(xmlhttp.responseText);
 	    	}
 		}
@@ -76,19 +77,24 @@
 		var jarray = $.parseJSON(jsontext);
 		var i = 0;
 
-		var html = "table";
+		var html = "<table class='table table-hover'><thead><tr><th>ID</th><th>TITLE</th><th>DESCRIPTION</th><th>Delete video</th></tr></thead>";
 
-		for (i; i < jarray.length; i++) {
+		for (i; i < jarray.length; i++) 
+		{
 			html += "<tr><td>"+
 			jarray[i].id+"</td><td>"+
 			jarray[i].title+"</td><td>"+
-			jarray[i].description+"</td><tr>";
+			jarray[i].description+"</td>"+
+			//call function jquery delete with id...delete jarray[i]['id'];
+			//problem with below line of code - may not read the correct id as this is on page load to get id may 
+			"<td id='"+i+"' onclick='deletejson(this.id);'>DELETE</td></tr>";
 		}
 
 		html +="</table>"
 		document.getelementbyId("jsondata").innerhtml = html;
 	}
 
+	//method to accept yt api information and convert to json
 	function getJSONdata(urlstring)
 	{
 		var id = "";
@@ -110,6 +116,7 @@
 					"url" : urlstring
 				}
 
+		//sends json to function
 		writeJson(inputData);
 	}
 
@@ -119,9 +126,33 @@
 		//here i find infile = /file.json in js. to write to file in json. possibly use writeJson();
 
 		//$.writeJson("")
+		var obj = JSON.stringify(ytdata);
 
-		$.post('data.json', param1: 'value1', function(data, textStatus, xhr) {
-			/*optional stuff to do after success */
+		$.post('data.json', obj, function(data, textStatus) 
+		{
+			alert(obj);
+		});
+	}
+
+	//this is to accept the json id and delete it from file
+	function deletejson(id, jsonarray)
+	{
+		var deleting = document.getelementbyId(id);
+
+		$.ajax({
+			url: 'data.json',
+			type: 'DELETE',
+			dataType: 'json',
+			data: {jsonarray[id]}
+		})
+		.done(function() {
+			console.log("success");
+		})
+		.fail(function() {
+			console.log("error");
+		})
+		.always(function() {
+			console.log("complete");
 		});
 	}
 
